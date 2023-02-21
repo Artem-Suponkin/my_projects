@@ -19,25 +19,25 @@ languages = {'En': 1033, 'Ru': 1049, 'De': 1031, 'It': 1040, 'Fr': 1036, 'Es': 1
 headers_auth = {'Authorization': 'Basic ' + KEY}  # заголовки для получения токена
 auth = requests.post(URL_AUTH,  headers=headers_auth) # отправка запроса POST с заголовками
 
-if auth.status_code == 200:
-    token = auth.text
-    print(description)
+if auth.status_code == 200:  # проверка статуса запроса
+    token = auth.text  # получение токета
+    print(description) # вывод описания
     print()
     print("Выберите язык:")
-    print(*languages.keys())
-    language_firs = input('Введите аббревиатура языка: ')
-    language_last = input('Введите аббревиатура языка, на который хотите перевести слово: ')
+    print(*languages.keys()) # вывод возможных аббревиатур
+    language_firs = input('Введите аббревиатура языка: ')  # запрос аббревиатуры языка у пользователя, с которого будет осуществляться перевод
+    language_last = input('Введите аббревиатура языка, на который хотите перевести слово: ') # запрос аббревиатуры языка у пользователя на который будет осуществляться перевод
 
-    while True:
-        word = input('Введите слово для перевода: ')
+    while True: # бесконечный цикл для перевода слов
+        word = input('Введите слово для перевода: ') # запрос слова у пользователя
         if word:
-            headers_translate = {'Authorization': 'Bearer ' + token}
+            headers_translate = {'Authorization': 'Bearer ' + token} # заголовки для GET запроса
             params = {'text': word,
                       'srcLang': languages[language_firs],
-                      'dstLang': languages[language_last]}
-            req = requests.get(URL_TRANSLATE, headers=headers_translate, params=params)
-            res = req.json()
-            try:
+                      'dstLang': languages[language_last]} # параметры запроса
+            req = requests.get(URL_TRANSLATE, headers=headers_translate, params=params) # GET запрос
+            res = req.json() # получение json
+            try: # отлов исключений
                 print(res['Translation'] ['Translation'])
             except:
                 print('Не найдено варианта перевода!')
